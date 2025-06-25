@@ -1,11 +1,16 @@
 var socket = io();
 let btn = document.getElementById('btn');
-btn.onclick = function exec(){
-  socket.emit('from_client');
+let inputMsg = document.getElementById('newmsg');
+let msgList = document.getElementById('msglist');
+
+btn.onclick = function(){
+  socket.emit('send_message', {
+    msg: inputMsg.value
+  });
 }
-socket.on('from_server', ()=>{
-  console.log("collected a new evert from server");
-  const div = document.createElement('div');
-  div.innerText = 'New event from server';
-  document.body.appendChild(div);
+
+socket.on('msg_received', (data)=>{
+  let limsg = document.createElement('li');
+  limsg.innerText = data.msg;
+  msgList.appendChild(limsg)
 })
